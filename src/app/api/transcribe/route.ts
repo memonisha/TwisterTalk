@@ -43,8 +43,9 @@ export async function POST(req: NextRequest) {
     console.log("✅ Upload URL:", uploadData.upload_url);
 
     return NextResponse.json({ uploadUrl: uploadData.upload_url });
-  } catch (error: any) {
-    console.error("Fetch error:", error);
-    return NextResponse.json({ error: "Fetch failed: " + error.message }, { status: 500 });
-  }
+  } catch (error: unknown) {
+  const message = error instanceof Error ? error.message : "Unknown error";
+  console.error("Fetch error:", error);
+  return NextResponse.json({ error: "Fetch failed: " + message }, { status: 500 });
+}
 }

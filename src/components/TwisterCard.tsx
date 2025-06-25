@@ -8,11 +8,9 @@ const TwisterCard = () => {
   const [spokenText, setSpokenText] = useState("");
   const [feedback, setFeedback] = useState("");
 
-  // Initialize refs, but no Audio created here yet
   const clapAudio = useRef<HTMLAudioElement | null>(null);
   const sadAudio = useRef<HTMLAudioElement | null>(null);
 
-  // Setup Audio elements only in client
   useEffect(() => {
     clapAudio.current = new Audio("/sounds/clap.mp3");
     sadAudio.current = new Audio("/sounds/sad-buzzer.mp3");
@@ -34,13 +32,13 @@ const TwisterCard = () => {
     }
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
+    const recognition: SpeechRecognition = new SpeechRecognition();
 
     recognition.lang = "en-US";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const speech = event.results[0][0].transcript;
       setSpokenText(speech);
 
@@ -53,7 +51,7 @@ const TwisterCard = () => {
       }
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       setFeedback("❌ Error occurred in recognition: " + event.error);
       sadAudio.current?.play();
     };
@@ -128,7 +126,7 @@ const TwisterCard = () => {
       {spokenText && (
         <div style={{ marginTop: "1rem", fontSize: "1.2rem", color: "#555" }}>
           <p>
-            <strong>You said:</strong> "{spokenText}"
+            <strong>You said:</strong> &quot;{spokenText}&quot;
           </p>
         </div>
       )}

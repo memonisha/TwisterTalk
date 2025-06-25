@@ -2,34 +2,34 @@
 
 import React, { useState, useRef } from "react";
 
-const SpeechRecognition =
-  typeof window !== "undefined"
-    ? (window.SpeechRecognition || window.webkitSpeechRecognition)
-    : null;
-
 const SpeechRecognitionComponent = () => {
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const startListening = () => {
-    if (!SpeechRecognition) {
+    const SpeechRecognitionConstructor =
+      typeof window !== "undefined"
+        ? window.SpeechRecognition || window.webkitSpeechRecognition
+        : null;
+
+    if (!SpeechRecognitionConstructor) {
       alert("Speech Recognition not supported in this browser.");
       return;
     }
 
-    const recognition = new SpeechRecognition();
+    const recognition = new SpeechRecognitionConstructor();
     recognition.lang = "en-US";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const speech = event.results[0][0].transcript;
       setTranscript(speech);
       setListening(false);
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       alert("Error occurred in recognition: " + event.error);
       setListening(false);
     };
