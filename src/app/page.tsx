@@ -39,7 +39,7 @@ export default function Home() {
         />
       </div>
       <TwisterCard />
-      <p>📅 Deployed at: {new Date().toLocaleString()}</p>
+     
     </main>
   );
 }
