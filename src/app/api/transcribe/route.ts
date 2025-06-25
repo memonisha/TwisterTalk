@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     let uploadData;
     try {
       uploadData = JSON.parse(rawBody);
-    } catch (jsonErr) {
+    } catch {
       return NextResponse.json({ error: "Upload failed: Invalid JSON" }, { status: 500 });
     }
 
